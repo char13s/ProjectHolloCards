@@ -1,21 +1,43 @@
-using NUnit.Framework;
+// 4. DECK MANAGEMENT
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Deck : MonoBehaviour
 {
-    public List<Card> deck= new List<Card>();
+    private List<CardData> drawPile = new List<CardData>();
 
-    public Card DealCard()
-    {
-        Card dealtCard=CreateRandomCard();
-        deck.Add(dealtCard);
-        return dealtCard;
+    private void Awake() {
+        BuildDeck();
+        Shuffle();
     }
-    private Card CreateRandomCard() { 
-        Card newCard = new Card();
-        newCard.Rank = (RankSuit)Random.Range(0, 10);
-        newCard.CardColor = (ColorSuit)Random.Range(0, 4);
-        return newCard;
+
+    private void BuildDeck() {
+        // Populate deck with standard cards and item cards
+        for (int c = 0; c < 4; c++) {
+            for (int r = 0; r < 10; r++) {
+                drawPile.Add(new CardData {
+                    Rank = (RankSuit)r,
+                    CardColor = (ColorSuit)c,
+                    Type = CardType.Standard
+                });
+            }
+        }
+    }
+
+    public void Shuffle() {
+        for (int i = 0; i < drawPile.Count; i++) {
+            CardData temp = drawPile[i];
+            int randomIndex = Random.Range(i, drawPile.Count);
+            drawPile[i] = drawPile[randomIndex];
+            drawPile[randomIndex] = temp;
+        }
+    }
+
+    public CardData DrawCard() {
+        if (drawPile.Count == 0) return null;
+
+        CardData drawn = drawPile[0];
+        drawPile.RemoveAt(0);
+        return drawn;
     }
 }

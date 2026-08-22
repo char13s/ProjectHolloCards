@@ -6,4 +6,7 @@ public class GameManager : MonoBehaviour
     public void CreateCard(Transform hand,Card card) {
         Instantiate(cardPrefab, hand);
     }
+    public void PlayCard() { 
+    
+    }
 }
